@@ -1,6 +1,7 @@
 package main
 
 import (
+	backend_trainee_assignment_2023 "backend-trainee-assignment-2023"
 	"backend-trainee-assignment-2023/pkg/handlers"
 	"backend-trainee-assignment-2023/repository"
 	"errors"
@@ -15,6 +16,7 @@ func main() {
 	if err := initConfigs(); err != nil {
 		log.Fatalf("failed initializing configs: %v\n", err.Error())
 	}
+
 	db, err := repository.ConnectToDb(repository.Config{
 		User:     viper.GetString("db.user"),
 		Password: os.Getenv("DB_PASSWORD"),
@@ -29,13 +31,10 @@ func main() {
 		log.Fatalf("failed to connect to database: %v\n", err.Error())
 	}
 
-	router := handlers.InitRoutes()
-	server := http.Server{
-		Addr:    ":" + viper.GetString("port"),
-		Handler: router,
-	}
-	if err := server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-		log.Fatalf("failed to start server: %v\n", err.Error())
+	handler := handlers.InitRoutes()
+	server := new(backend_trainee_assignment_2023.Server)
+	if err := server.Run(viper.GetString("port"), handler); !errors.Is(err, http.ErrServerClosed) {
+		log.Fatalf("error occured while running http server: %v\n", err.Error())
 	}
 }
 
