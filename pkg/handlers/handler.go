@@ -1,8 +1,19 @@
 package handlers
 
-import "github.com/labstack/echo/v4"
+import (
+	"backend-trainee-assignment-2023/pkg/services"
+	"github.com/labstack/echo/v4"
+)
 
-func InitRoutes() *echo.Echo {
+type Handler struct {
+	service *services.Service
+}
+
+func NewHandler(service *services.Service) *Handler {
+	return &Handler{service: service}
+}
+
+func (h *Handler) InitRoutes() *echo.Echo {
 	router := echo.New()
 	segment := router.Group("/segment")
 	{

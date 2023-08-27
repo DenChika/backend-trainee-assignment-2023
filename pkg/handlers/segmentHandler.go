@@ -1,4 +1,4 @@
-package services
+package handlers
 
 import (
 	"github.com/labstack/echo/v4"
@@ -13,7 +13,7 @@ func CreateSegment(ctx echo.Context) error {
 	var segment Segment
 	err := ctx.Bind(&segment)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Bad request")
+		return ctx.JSON(http.StatusBadRequest, nil)
 	}
-	return ctx.String(http.StatusOK, "")
+	return ctx.JSON(http.StatusOK, nil)
 }

@@ -3,7 +3,8 @@ package main
 import (
 	backend_trainee_assignment_2023 "backend-trainee-assignment-2023"
 	"backend-trainee-assignment-2023/pkg/handlers"
-	"backend-trainee-assignment-2023/repository"
+	"backend-trainee-assignment-2023/pkg/repository"
+	"backend-trainee-assignment-2023/pkg/services"
 	"errors"
 	"github.com/jmoiron/sqlx"
 	"github.com/spf13/viper"
@@ -31,9 +32,11 @@ func main() {
 		log.Fatalf("failed to connect to database: %v\n", err.Error())
 	}
 
-	handler := handlers.InitRoutes()
+	repos := repository.NewRepository(db)
+	service := services.NewService(repos)
+	handler := handlers.NewHandler(service)
 	server := new(backend_trainee_assignment_2023.Server)
-	if err := server.Run(viper.GetString("port"), handler); !errors.Is(err, http.ErrServerClosed) {
+	if err := server.Run(viper.GetString("port"), handler.InitRoutes()); !errors.Is(err, http.ErrServerClosed) {
 		log.Fatalf("error occured while running http server: %v\n", err.Error())
 	}
 }

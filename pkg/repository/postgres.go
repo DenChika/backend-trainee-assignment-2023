@@ -5,6 +5,11 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+const (
+	segmentsTable      = "segments"
+	usersSegmentsTable = "users_segments"
+)
+
 type Config struct {
 	User     string
 	Password string
