@@ -15,21 +15,23 @@ import (
 
 func main() {
 	if err := initConfigs(); err != nil {
-		log.Fatalf("failed initializing configs: %v\n", err.Error())
+		log.Fatalf("failed initializing configs: %v\n", err)
 	}
 
-	db, err := repository.ConnectToDb(repository.Config{
-		User:     viper.GetString("db.user"),
-		Password: os.Getenv("DB_PASSWORD"),
-		Host:     viper.GetString("db.host"),
-		Port:     viper.GetString("db.port"),
-		Name:     viper.GetString("db.name"),
-	})
+	db, err := repository.ConnectToDb(
+		repository.Config{
+			User:     viper.GetString("db.user"),
+			Password: os.Getenv("DB_PASSWORD"),
+			Host:     viper.GetString("db.host"),
+			Port:     viper.GetString("db.port"),
+			Name:     viper.GetString("db.name"),
+			Ssl:      viper.GetString("db.ssl"),
+		})
 	defer func(db *sqlx.DB) {
 		_ = db.Close()
 	}(db)
 	if err != nil {
-		log.Fatalf("failed to connect to database: %v\n", err.Error())
+		log.Fatalf("failed to connect to database: %v\n", err)
 	}
 
 	repos := repository.NewRepository(db)
@@ -37,12 +39,12 @@ func main() {
 	handler := handlers.NewHandler(service)
 	server := new(backend_trainee_assignment_2023.Server)
 	if err := server.Run(viper.GetString("port"), handler.InitRoutes()); !errors.Is(err, http.ErrServerClosed) {
-		log.Fatalf("error occured while running http server: %v\n", err.Error())
+		log.Fatalf("error occured while running http server: %v\n", err)
 	}
 }
 
 func initConfigs() error {
 	viper.AddConfigPath("configs")
-	viper.SetConfigFile("config")
+	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }

@@ -4,13 +4,23 @@ CREATE TABLE segments
     slug varchar(255) not null unique
 );
 
-CREATE TYPE segment_operation AS ENUM('add', 'delete');
-
 CREATE TABLE users_segments
 (
     id serial primary key,
     user_id int not null,
-    foreign key(segment_id) references segments on delete cascade,
+    segment_id serial not null,
+    foreign key (segment_id) references segments (id) on delete cascade,
+    unique (user_id, segment_id)
+)
+
+CREATE TYPE segment_operation AS ENUM('add', 'delete');
+
+CREATE TABLE users_segments_history
+(
+    id serial primary key,
+    user_id int not null,
+    segment_id serial not null,
     operation segment_operation not null,
-    updated_at date not null
+    updated_at timestamp not null,
+    foreign key (segment_id) references segments (id) on delete cascade
 );

@@ -6,14 +6,19 @@ import (
 )
 
 type Segment struct {
-	Slug string
+	Slug string `param:"slug"`
 }
 
-func CreateSegment(ctx echo.Context) error {
+func (h *Handler) CreateSegment(ctx echo.Context) error {
 	var segment Segment
-	err := ctx.Bind(&segment)
-	if err != nil {
+	if err := ctx.Bind(&segment); err != nil {
 		return ctx.JSON(http.StatusBadRequest, nil)
 	}
-	return ctx.JSON(http.StatusOK, nil)
+	id, err := h.service.Segment.Create(segment.Slug)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, nil)
+	}
+	return ctx.JSON(http.StatusOK, map[string]interface{}{
+		"id": id,
+	})
 }

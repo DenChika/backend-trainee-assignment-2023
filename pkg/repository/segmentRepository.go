@@ -24,5 +24,7 @@ func (repo *SegmentRepository) Create(slug string) (int, error) {
 }
 
 func (repo *SegmentRepository) Delete(slug string) error {
-	return nil
+	query := fmt.Sprintf("DELETE FROM %s AS s WHERE s.slug=$1", segmentsTable)
+	_, err := repo.db.Exec(query, slug)
+	return err
 }
