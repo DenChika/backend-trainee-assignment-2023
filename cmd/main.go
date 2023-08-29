@@ -7,6 +7,7 @@ import (
 	"backend-trainee-assignment-2023/pkg/services"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"log"
 	"net/http"
@@ -18,6 +19,9 @@ func main() {
 		log.Fatalf("failed initializing configs: %v\n", err)
 	}
 
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("failed loading env varisbles: %v\n", err)
+	}
 	db, err := repository.ConnectToDb(
 		repository.Config{
 			User:     viper.GetString("db.user"),

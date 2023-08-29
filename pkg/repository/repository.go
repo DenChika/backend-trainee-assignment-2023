@@ -8,8 +8,8 @@ type Segment interface {
 }
 
 type User interface {
-	AddUserToSegment(slugsToAdd []string, slugsToRemove []string, userId int) error
-	GetUserSegments(userId int) ([]string, error)
+	AddUserToSegment(slugsToAdd []string, slugsToRemove []string, userId uint) error
+	GetUserSegments(userId uint) ([]string, error)
 }
 
 type Repository struct {

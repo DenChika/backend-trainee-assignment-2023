@@ -17,8 +17,13 @@ func (h *Handler) InitRoutes() *echo.Echo {
 	router := echo.New()
 	segment := router.Group("/segment")
 	{
-		segment.POST("/segment", h.CreateSegment)
-		segment.GET("/", func(ctx echo.Context) error { return nil })
+		segment.POST("", h.CreateSegment)
+		segment.DELETE("", h.DeleteSegment)
+	}
+	userSegment := router.Group("/user-segment")
+	{
+		userSegment.POST("", h.AddUserToSegment)
+		userSegment.GET("", h.GetUserSegments)
 	}
 	return router
 }

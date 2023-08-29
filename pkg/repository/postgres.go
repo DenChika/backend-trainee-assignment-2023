@@ -23,7 +23,7 @@ type Config struct {
 
 func ConnectToDb(cfg Config) (*sqlx.DB, error) {
 	db, err := sqlx.Open("postgres", fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
-		cfg.Host, cfg.Port, cfg.User, cfg.Name, cfg.Password, cfg.Ssl))
+		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.Name, cfg.Ssl))
 	if err != nil {
 		return nil, err
 	}
