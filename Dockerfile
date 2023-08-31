@@ -9,5 +9,4 @@ COPY ./ ./
 RUN go mod download
 RUN go build -o backend-trainee-assignment-2023 ./cmd/main.go
 
-# Exposing server port
 CMD ["./backend-trainee-assignment-2023"]
