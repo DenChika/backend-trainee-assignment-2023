@@ -25,4 +25,4 @@ CREATE TABLE users_segments_history
 );
 
 CREATE UNIQUE INDEX users_segments_index
-    ON users_segments (user_id, segment_id)
+    ON users_segments (user_id, segment_id);
