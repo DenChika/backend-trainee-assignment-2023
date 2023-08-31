@@ -1,14 +1,17 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	"backend-trainee-assignment-2023/pkg/models"
+	"github.com/jmoiron/sqlx"
+)
 
 type Segment interface {
-	Create(slug string) (int, error)
+	Create(slug string) (uint, error)
 	Delete(slug string) error
 }
 
 type User interface {
-	AddUserToSegment(slugsToAdd []string, slugsToRemove []string, userId uint) error
+	ManageUserToSegments(slugsToAdd []string, slugsToRemove []string, userId uint) (*models.ManageUserToSegmentsResponse, error)
 	GetUserSegments(userId uint) ([]string, error)
 }
 
@@ -20,6 +23,6 @@ type Repository struct {
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Segment: NewSegmentRepository(db),
-		User:    NewUserRepository(db),
+		User:    NewUsersSegmentsRepository(db),
 	}
 }

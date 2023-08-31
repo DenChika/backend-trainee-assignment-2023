@@ -5,3 +5,4 @@ db:
   port: "5432"
   name: "avitoSegmentsDb"
   ssl: "disable"
+  driver: "postgres"

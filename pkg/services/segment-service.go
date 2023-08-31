@@ -10,7 +10,7 @@ func NewSegmentService(repo repository.Segment) *SegmentService {
 	return &SegmentService{repo: repo}
 }
 
-func (service *SegmentService) Create(slug string) (int, error) {
+func (service *SegmentService) Create(slug string) (uint, error) {
 	return service.repo.Create(slug)
 }
 

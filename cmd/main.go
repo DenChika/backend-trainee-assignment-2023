@@ -14,6 +14,13 @@ import (
 	"os"
 )
 
+// @title Backend Trainee Assignment 2023 API
+// @version 1.0
+// @description API server for management users segments
+
+// @host localhost:8080
+// @BasePath /
+
 func main() {
 	if err := initConfigs(); err != nil {
 		log.Fatalf("failed initializing configs: %v\n", err)
@@ -23,13 +30,14 @@ func main() {
 		log.Fatalf("failed loading env varisbles: %v\n", err)
 	}
 	db, err := repository.ConnectToDb(
-		repository.Config{
+		repository.DbConfig{
 			User:     viper.GetString("db.user"),
 			Password: os.Getenv("DB_PASSWORD"),
 			Host:     viper.GetString("db.host"),
 			Port:     viper.GetString("db.port"),
 			Name:     viper.GetString("db.name"),
 			Ssl:      viper.GetString("db.ssl"),
+			Driver:   viper.GetString("db.driver"),
 		})
 	defer func(db *sqlx.DB) {
 		_ = db.Close()

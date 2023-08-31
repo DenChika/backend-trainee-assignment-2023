@@ -1,6 +1,8 @@
-package helpers
+package handlers
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/labstack/echo/v4"
+)
 
 type errorResponse struct {
 	Message string

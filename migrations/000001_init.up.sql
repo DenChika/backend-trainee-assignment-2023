@@ -23,3 +23,6 @@ CREATE TABLE users_segments_history
     operation segment_operation not null,
     updated_at timestamp not null
 );
+
+CREATE UNIQUE INDEX users_segments_index
+    ON users_segments (user_id, segment_id)

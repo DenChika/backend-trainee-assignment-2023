@@ -1,16 +1,17 @@
 package services
 
 import (
+	"backend-trainee-assignment-2023/pkg/models"
 	"backend-trainee-assignment-2023/pkg/repository"
 )
 
 type Segment interface {
-	Create(slug string) (int, error)
+	Create(slug string) (uint, error)
 	Delete(slug string) error
 }
 
 type User interface {
-	AddUserToSegment(slugsToAdd []string, slugsToRemove []string, userId uint) error
+	ManageUserToSegments(slugsToAdd []string, slugsToRemove []string, userId uint) (*models.ManageUserToSegmentsResponse, error)
 	GetUserSegments(userId uint) ([]string, error)
 }
 
@@ -22,6 +23,6 @@ type Service struct {
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Segment: NewSegmentService(repo.Segment),
-		User:    NewUserService(repo.User),
+		User:    NewUsersSegmentsService(repo.User),
 	}
 }
