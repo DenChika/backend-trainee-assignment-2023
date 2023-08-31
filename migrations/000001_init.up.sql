@@ -21,8 +21,7 @@ CREATE TABLE users_segments_history
     user_id serial not null,
     segment_slug varchar(255) not null,
     operation segment_operation not null,
-    updated_at timestamp not null,
-    foreign key (segment_id) references segments (id),
+    updated_at timestamp not null
 );
 
 CREATE UNIQUE INDEX users_segments_index
