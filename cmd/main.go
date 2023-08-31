@@ -33,7 +33,7 @@ func main() {
 		repository.DbConfig{
 			User:     viper.GetString("db.user"),
 			Password: os.Getenv("DB_PASSWORD"),
-			Host:     viper.GetString("db.host"),
+			Host:     os.Getenv("DB_HOST"),
 			Port:     viper.GetString("db.port"),
 			Name:     viper.GetString("db.name"),
 			Ssl:      viper.GetString("db.ssl"),

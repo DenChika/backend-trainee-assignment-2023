@@ -19,7 +19,7 @@ CREATE TABLE users_segments_history
 (
     id serial primary key,
     user_id serial not null,
-    segment_slug varchar(255) not null,
+    segment_id serial not null,
     operation segment_operation not null,
     updated_at timestamp not null
 );

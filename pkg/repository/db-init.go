@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"log"
 )
 
 const (
@@ -27,7 +26,7 @@ func ConnectToDb(cfg DbConfig) (*sqlx.DB, error) {
 	db, err := sqlx.Open(cfg.Driver, fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
 		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.Name, cfg.Ssl))
 	if err != nil {
-		log.Fatalf("aboba cfg:%v\n", cfg)
+
 		return nil, err
 	}
 
