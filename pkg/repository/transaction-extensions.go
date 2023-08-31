@@ -94,19 +94,23 @@ func (tx *Transaction) deleteSegmentsFromUser(segmentsToRemove []uint, userId ui
 }
 
 func (tx *Transaction) saveInHistory(segments []uint, userId uint, op operation) error {
+	slugs, err := tx.findSlugsByIds(segments)
+	if err != nil {
+		return err
+	}
 	var usersSegmentsHistoryBuilder strings.Builder
 	usersSegmentsHistoryBuilder.WriteString(fmt.Sprintf(
 		"INSERT INTO %s (user_id, segment_slug, operation, updated_at) VALUES ",
 		usersSegmentsHistoryTable))
-	for i, id := range segments {
+	for i, slug := range slugs {
 		if i != 0 {
 			usersSegmentsHistoryBuilder.WriteString(", ")
 		}
 		usersSegmentsHistoryBuilder.WriteString(
-			fmt.Sprintf("('%d', '%d', '%s', 'now()')", userId, id, op))
+			fmt.Sprintf("('%d', '%s', '%s', 'now()')", userId, slug, op))
 	}
 
 	query := usersSegmentsHistoryBuilder.String()
-	_, err := tx.Exec(query)
+	_, err = tx.Exec(query)
 	return err
 }

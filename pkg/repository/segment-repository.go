@@ -29,17 +29,8 @@ func (repo *SegmentRepository) Create(slug string) (uint, error) {
 }
 
 func (repo *SegmentRepository) Delete(slug string) error {
-	query := fmt.Sprintf("DELETE FROM %s AS s WHERE s.slug=$1", segmentsTable)
-	_, err := repo.db.Exec(query, slug)
+	tx := NewTransaction(repo.db.MustBegin())
+	queryDelete := fmt.Sprintf("DELETE FROM %s AS s WHERE s.slug=$1", segmentsTable)
+	_, err := tx.Exec(queryDelete, slug)
 	return err
-}
-
-func decomposeSegments(segments []SegmentEntity) ([]uint, []string) {
-	var ids []uint
-	var slugs []string
-	for _, seg := range segments {
-		ids = append(ids, seg.Id)
-		slugs = append(slugs, seg.Slug)
-	}
-	return ids, slugs
 }
