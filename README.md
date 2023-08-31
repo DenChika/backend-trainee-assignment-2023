@@ -63,6 +63,12 @@ make migrate-up
 
 ![image](https://github.com/DenChika/backend-trainee-assignment-2023/assets/79001610/58b0faf4-a2eb-455b-a168-4ea5fab503c3)
 
+### Swagger
+
+Swagger файл описан в директории [docs](docs)
+
+При работающем приложении можно посмотреть [здесь](http://localhost:8080/swagger/index.html)
+
 ### Схема бд
 
 Схема бд описана в [файле первой миграции](migrations/000001_init.up.sql)
