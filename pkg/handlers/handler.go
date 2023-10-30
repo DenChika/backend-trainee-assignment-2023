@@ -30,5 +30,11 @@ func (h *Handler) InitRoutes() *echo.Echo {
 		userSegment.POST("/", h.ManageUserToSegments)
 		userSegment.GET("/", h.GetUserSegments)
 	}
+
+	auth := router.Group("/auth")
+	{
+		auth.POST("/sign-up", h.signUp)
+		auth.GET("/sign-in", h.signIn)
+	}
 	return router
 }

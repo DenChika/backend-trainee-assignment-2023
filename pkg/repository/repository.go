@@ -10,19 +10,26 @@ type Segment interface {
 	Delete(slug string) error
 }
 
-type User interface {
+type UsersSegment interface {
 	ManageUserToSegments(slugsToAdd []string, slugsToRemove []string, userId uint) (*models.ManageUserToSegmentsResponse, error)
 	GetUserSegments(userId uint) ([]string, error)
 }
 
+type Authorization interface {
+	CreateUser(username, password string) error
+	GetUser(username, password string) (uint, error)
+}
+
 type Repository struct {
 	Segment
-	User
+	UsersSegment
+	Authorization
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-		Segment: NewSegmentRepository(db),
-		User:    NewUsersSegmentsRepository(db),
+		Segment:       newSegmentRepository(db),
+		UsersSegment:  newUsersSegmentsRepository(db),
+		Authorization: newAuthorizationRepository(db),
 	}
 }

@@ -13,3 +13,8 @@ type ManageUserToSegmentsRequest struct {
 type GetUserSegmentsRequest struct {
 	UserId uint `json:"user-id" validate:"empty=false"`
 }
+
+type AuthRequest struct {
+	Username string
+	Password string
+}

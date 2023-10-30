@@ -51,7 +51,7 @@ func (h *Handler) GetUserSegments(ctx echo.Context) error {
 	if err := ctx.Bind(&req); err != nil {
 		return NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
-	slugs, err := h.service.User.GetUserSegments(req.UserId)
+	slugs, err := h.service.UsersSegment.GetUserSegments(req.UserId)
 	if err != nil {
 		return NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}

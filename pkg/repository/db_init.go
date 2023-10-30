@@ -10,6 +10,7 @@ const (
 	segmentsTable             = "segments"
 	usersSegmentsTable        = "users_segments"
 	usersSegmentsHistoryTable = "users_segments_history"
+	usersTable                = "users"
 )
 
 type DbConfig struct {

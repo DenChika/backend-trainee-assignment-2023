@@ -6,7 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type UsersSegmentsRepository struct {
+type usersSegmentsRepository struct {
 	db *sqlx.DB
 }
 
@@ -17,11 +17,11 @@ const (
 	delete operation = "delete"
 )
 
-func NewUsersSegmentsRepository(db *sqlx.DB) *UsersSegmentsRepository {
-	return &UsersSegmentsRepository{db: db}
+func newUsersSegmentsRepository(db *sqlx.DB) *usersSegmentsRepository {
+	return &usersSegmentsRepository{db: db}
 }
 
-func (repo *UsersSegmentsRepository) ManageUserToSegments(slugsToAdd []string, slugsToRemove []string, userId uint) (*models.ManageUserToSegmentsResponse, error) {
+func (repo *usersSegmentsRepository) ManageUserToSegments(slugsToAdd []string, slugsToRemove []string, userId uint) (*models.ManageUserToSegmentsResponse, error) {
 	tx := NewTransaction(repo.db.MustBegin())
 
 	_, err := tx.Exec(fmt.Sprintf("SET TRANSACTION ISOLATION LEVEL %s", "REPEATABLE READ"))
@@ -85,7 +85,7 @@ func (repo *UsersSegmentsRepository) ManageUserToSegments(slugsToAdd []string, s
 	}, tx.Commit()
 }
 
-func (repo *UsersSegmentsRepository) GetUserSegments(userId uint) ([]string, error) {
+func (repo *usersSegmentsRepository) GetUserSegments(userId uint) ([]string, error) {
 	var slugs []string
 	query := fmt.Sprintf(
 		`SELECT s.slug FROM %s AS us 

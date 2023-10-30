@@ -18,7 +18,7 @@ migrate-new:
 	migrate create -ext sql -dir $(MIGRATIONS_DIR) -seq $(NAME)
 
 migrate-up:
-	migrate -path $(MIGRATIONS_DIR) -database $(DATABASE_URL) up $(UPSTEP)
+	migrate -path $(MIGRATIONS_DIR) -database $(DATABASE_URL) up $(UP_STEP)
 
 migrate-down:
-	migrate -path $(MIGRATIONS_DIR) -database $(DATABASE_URL) down $(DOWNSTEP)
+	migrate -path $(MIGRATIONS_DIR) -database $(DATABASE_URL) down $(DOWN_STEP)

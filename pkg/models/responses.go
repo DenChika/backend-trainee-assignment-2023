@@ -13,3 +13,7 @@ type ManageUserToSegmentsResponse struct {
 	SlugsHaveBeenRemoved []string `json:"slugs-that-have-been-removed"`
 	UserId               uint     `json:"user-id"`
 }
+
+type SignInResponse struct {
+	Token string
+}
