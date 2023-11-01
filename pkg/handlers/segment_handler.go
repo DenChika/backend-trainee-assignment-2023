@@ -21,11 +21,11 @@ import (
 func (h *Handler) CreateSegment(ctx echo.Context) error {
 	var req models.SegmentRequest
 	if err := ctx.Bind(&req); err != nil {
-		return NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return newErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
 	id, err := h.service.Segment.Create(req.Slug)
 	if err != nil {
-		return NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
 	return ctx.JSON(http.StatusOK, models.CreateSegmentResponse{Id: id})
 }
@@ -45,10 +45,10 @@ func (h *Handler) CreateSegment(ctx echo.Context) error {
 func (h *Handler) DeleteSegment(ctx echo.Context) error {
 	var req models.SegmentRequest
 	if err := ctx.Bind(&req); err != nil {
-		return NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return newErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
 	if err := h.service.Segment.Delete(req.Slug); err != nil {
-		return NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
 	return ctx.JSON(http.StatusOK, map[string]interface{}{
 		"status": http.StatusOK,

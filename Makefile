@@ -12,6 +12,7 @@ build:
 	docker-compose build
 
 run:
+	make build
 	docker-compose up
 
 migrate-new:

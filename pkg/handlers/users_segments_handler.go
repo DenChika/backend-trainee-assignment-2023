@@ -19,13 +19,17 @@ import (
 // @Failure default {object} errorResponse
 // @Router /users-segments [post]
 func (h *Handler) ManageUserToSegments(ctx echo.Context) error {
+	userId, err := getUserId(ctx)
+	if err != nil {
+		return newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+	}
 	var req models.ManageUserToSegmentsRequest
 	if err := ctx.Bind(&req); err != nil {
-		return NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return newErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
-	resp, err := h.service.ManageUserToSegments(req.SlugsToAdd, req.SlugsToRemove, req.UserId)
+	resp, err := h.service.ManageUserToSegments(req.SlugsToAdd, req.SlugsToRemove, userId)
 	if err != nil {
-		return NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
 	return ctx.JSON(http.StatusOK, models.ManageUserToSegmentsResponse{
 		SlugsHaveBeenAdded:   resp.SlugsHaveBeenAdded,
@@ -40,20 +44,19 @@ func (h *Handler) ManageUserToSegments(ctx echo.Context) error {
 // @ID get-user-segments
 // @Accept  json
 // @Produce  json
-// @Param input body models.GetUserSegmentsRequest true "user id"
 // @Success 200 {object} models.GetUserSegmentsResponse
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /users-segments [get]
 func (h *Handler) GetUserSegments(ctx echo.Context) error {
-	var req models.GetUserSegmentsRequest
-	if err := ctx.Bind(&req); err != nil {
-		return NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
-	}
-	slugs, err := h.service.UsersSegment.GetUserSegments(req.UserId)
+	userId, err := getUserId(ctx)
 	if err != nil {
-		return NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+	}
+	slugs, err := h.service.UsersSegment.GetUserSegments(userId)
+	if err != nil {
+		return newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
 	return ctx.JSON(http.StatusOK, models.GetUserSegmentsResponse{Slugs: slugs})
 }

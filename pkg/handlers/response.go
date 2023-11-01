@@ -9,6 +9,6 @@ type errorResponse struct {
 	Status  int
 }
 
-func NewErrorResponse(ctx echo.Context, statusCode int, message string) error {
+func newErrorResponse(ctx echo.Context, statusCode int, message string) error {
 	return ctx.JSON(statusCode, errorResponse{Message: message, Status: statusCode})
 }

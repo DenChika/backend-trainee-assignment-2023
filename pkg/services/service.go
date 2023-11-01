@@ -18,6 +18,7 @@ type UsersSegment interface {
 type Authorization interface {
 	SignUp(username, password string) error
 	SignIn(username, password string) (string, error)
+	ParseToken(accessToken string) (uint, error)
 }
 
 type Service struct {

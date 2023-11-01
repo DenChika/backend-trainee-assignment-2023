@@ -81,7 +81,6 @@ func (repo *usersSegmentsRepository) ManageUserToSegments(slugsToAdd []string, s
 	return &models.ManageUserToSegmentsResponse{
 		SlugsHaveBeenAdded:   slugsHaveBeenAdded,
 		SlugsHaveBeenRemoved: slugsHaveBeenRemoved,
-		UserId:               userId,
 	}, tx.Commit()
 }
 

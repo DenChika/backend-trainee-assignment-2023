@@ -19,13 +19,13 @@ func (h *Handler) InitRoutes() *echo.Echo {
 
 	router.GET("/swagger/*", echoSwagger.WrapHandler)
 
-	segment := router.Group("/segment")
+	segment := router.Group("/segment", h.userIdentity)
 	{
 		segment.POST("/", h.CreateSegment)
 		segment.DELETE("/", h.DeleteSegment)
 	}
 
-	userSegment := router.Group("/users-segments")
+	userSegment := router.Group("/users-segments", h.userIdentity)
 	{
 		userSegment.POST("/", h.ManageUserToSegments)
 		userSegment.GET("/", h.GetUserSegments)

@@ -13,7 +13,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param input body models.AuthRequest true "username, password"
-// @Success 200 {object} integer 1
+// @Success 200 {integer} integer 1
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
@@ -21,10 +21,10 @@ import (
 func (h *Handler) signUp(ctx echo.Context) error {
 	var req models.AuthRequest
 	if err := ctx.Bind(&req); err != nil {
-		return NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return newErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
 	if err := h.service.Authorization.SignUp(req.Username, req.Password); err != nil {
-		return NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
 	return ctx.JSON(http.StatusOK, map[string]interface{}{
 		"status": http.StatusOK,
@@ -46,11 +46,11 @@ func (h *Handler) signUp(ctx echo.Context) error {
 func (h *Handler) signIn(ctx echo.Context) error {
 	var req models.AuthRequest
 	if err := ctx.Bind(&req); err != nil {
-		return NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return newErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
 	token, err := h.service.Authorization.SignIn(req.Username, req.Password)
 	if err != nil {
-		return NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
 	return ctx.JSON(http.StatusOK, models.SignInResponse{Token: token})
 }
