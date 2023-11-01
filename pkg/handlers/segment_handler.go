@@ -7,6 +7,7 @@ import (
 )
 
 // @Summary CreateSegment
+// @Security ApiKeyAuth
 // @Tags segment
 // @Description create segment
 // @ID create-segment
@@ -17,7 +18,7 @@ import (
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /segment [post]
+// @Router /segment/ [post]
 func (h *Handler) CreateSegment(ctx echo.Context) error {
 	var req models.SegmentRequest
 	if err := ctx.Bind(&req); err != nil {
@@ -31,6 +32,7 @@ func (h *Handler) CreateSegment(ctx echo.Context) error {
 }
 
 // @Summary DeleteSegment
+// @Security ApiKeyAuth
 // @Tags segment
 // @Description delete segment
 // @ID delete-segment
@@ -41,7 +43,7 @@ func (h *Handler) CreateSegment(ctx echo.Context) error {
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /segment [delete]
+// @Router /segment/ [delete]
 func (h *Handler) DeleteSegment(ctx echo.Context) error {
 	var req models.SegmentRequest
 	if err := ctx.Bind(&req); err != nil {

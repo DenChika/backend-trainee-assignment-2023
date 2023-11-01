@@ -7,14 +7,19 @@ definitions:
       status:
         type: integer
     type: object
+  models.AuthRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
   models.CreateSegmentResponse:
     properties:
       id:
-        type: integer
-    type: object
-  models.GetUserSegmentsRequest:
-    properties:
-      user-id:
         type: integer
     type: object
   models.GetUserSegmentsResponse:
@@ -34,8 +39,9 @@ definitions:
         items:
           type: string
         type: array
-      user-id:
-        type: integer
+    required:
+    - slugs-to-add
+    - slugs-to-remove
     type: object
   models.ManageUserToSegmentsResponse:
     properties:
@@ -47,12 +53,17 @@ definitions:
         items:
           type: string
         type: array
-      user-id:
-        type: integer
     type: object
   models.SegmentRequest:
     properties:
       slug:
+        type: string
+    required:
+    - slug
+    type: object
+  models.SignInResponse:
+    properties:
+      token:
         type: string
     type: object
 host: localhost:8080
@@ -62,7 +73,85 @@ info:
   title: Backend Trainee Assignment 2023 API
   version: "1.0"
 paths:
-  /segment:
+  /auth/sign-in:
+    get:
+      consumes:
+      - application/json
+      description: sign in
+      operationId: sign-in
+      parameters:
+      - description: username, password
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SignInResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: signIn
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: sign up
+      operationId: sign-up
+      parameters:
+      - description: username, password
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: signUp
+      tags:
+      - auth
+  /segment/:
     delete:
       consumes:
       - application/json
@@ -98,6 +187,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handlers.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: DeleteSegment
       tags:
       - segment
@@ -136,22 +227,17 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handlers.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: CreateSegment
       tags:
       - segment
-  /users-segments:
+  /users-segments/:
     get:
       consumes:
       - application/json
       description: get all user segments
       operationId: get-user-segments
-      parameters:
-      - description: user id
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/models.GetUserSegmentsRequest'
       produces:
       - application/json
       responses:
@@ -175,6 +261,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handlers.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: GetUserSegments
       tags:
       - users-segment
@@ -213,7 +301,14 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handlers.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: ManageUserToSegments
       tags:
       - users-segment
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

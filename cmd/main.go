@@ -1,7 +1,8 @@
 package main
 
 import (
-	backend_trainee_assignment_2023 "backend-trainee-assignment-2023"
+	backendTraineeAssignment2023 "backend-trainee-assignment-2023"
+	_ "backend-trainee-assignment-2023/docs"
 	"backend-trainee-assignment-2023/pkg/handlers"
 	"backend-trainee-assignment-2023/pkg/repository"
 	"backend-trainee-assignment-2023/pkg/services"
@@ -21,6 +22,9 @@ import (
 // @host localhost:8080
 // @BasePath /
 
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	if err := initConfigs(); err != nil {
 		logrus.Fatalf("failed initializing configs: %s\n", err.Error())
@@ -49,7 +53,7 @@ func main() {
 	repos := repository.NewRepository(db)
 	service := services.NewService(repos)
 	handler := handlers.NewHandler(service)
-	server := new(backend_trainee_assignment_2023.Server)
+	server := new(backendTraineeAssignment2023.Server)
 	if err := server.Run(viper.GetString("port"), handler.InitRoutes()); !errors.Is(err, http.ErrServerClosed) {
 		logrus.Fatalf("error occured while running http server: %s\n", err.Error())
 	}

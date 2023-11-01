@@ -7,6 +7,7 @@ import (
 )
 
 // @Summary ManageUserToSegments
+// @Security ApiKeyAuth
 // @Tags users-segment
 // @Description add and remove segments from user
 // @ID manage-user-to-segments
@@ -17,7 +18,7 @@ import (
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /users-segments [post]
+// @Router /users-segments/ [post]
 func (h *Handler) ManageUserToSegments(ctx echo.Context) error {
 	userId, err := getUserId(ctx)
 	if err != nil {
@@ -38,6 +39,7 @@ func (h *Handler) ManageUserToSegments(ctx echo.Context) error {
 }
 
 // @Summary GetUserSegments
+// @Security ApiKeyAuth
 // @Tags users-segment
 // @Description get all user segments
 // @ID get-user-segments
@@ -47,7 +49,7 @@ func (h *Handler) ManageUserToSegments(ctx echo.Context) error {
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /users-segments [get]
+// @Router /users-segments/ [get]
 func (h *Handler) GetUserSegments(ctx echo.Context) error {
 	userId, err := getUserId(ctx)
 	if err != nil {

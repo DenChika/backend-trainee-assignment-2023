@@ -15,8 +15,131 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/segment": {
+        "/auth/sign-in": {
+            "get": {
+                "description": "sign in",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "signIn",
+                "operationId": "sign-in",
+                "parameters": [
+                    {
+                        "description": "username, password",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AuthRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SignInResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sign-up": {
             "post": {
+                "description": "sign up",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "signUp",
+                "operationId": "sign-up",
+                "parameters": [
+                    {
+                        "description": "username, password",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AuthRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/segment/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "create segment",
                 "consumes": [
                     "application/json"
@@ -74,6 +197,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "delete segment",
                 "consumes": [
                     "application/json"
@@ -131,8 +259,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/users-segments": {
+        "/users-segments/": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "get all user segments",
                 "consumes": [
                     "application/json"
@@ -145,17 +278,6 @@ const docTemplate = `{
                 ],
                 "summary": "GetUserSegments",
                 "operationId": "get-user-segments",
-                "parameters": [
-                    {
-                        "description": "user id",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.GetUserSegmentsRequest"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -190,6 +312,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "add and remove segments from user",
                 "consumes": [
                     "application/json"
@@ -260,18 +387,25 @@ const docTemplate = `{
                 }
             }
         },
+        "models.AuthRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "models.CreateSegmentResponse": {
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.GetUserSegmentsRequest": {
-            "type": "object",
-            "properties": {
-                "user-id": {
                     "type": "integer"
                 }
             }
@@ -289,6 +423,10 @@ const docTemplate = `{
         },
         "models.ManageUserToSegmentsRequest": {
             "type": "object",
+            "required": [
+                "slugs-to-add",
+                "slugs-to-remove"
+            ],
             "properties": {
                 "slugs-to-add": {
                     "type": "array",
@@ -301,9 +439,6 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
-                },
-                "user-id": {
-                    "type": "integer"
                 }
             }
         },
@@ -321,19 +456,34 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
-                },
-                "user-id": {
-                    "type": "integer"
                 }
             }
         },
         "models.SegmentRequest": {
             "type": "object",
+            "required": [
+                "slug"
+            ],
             "properties": {
                 "slug": {
                     "type": "string"
                 }
             }
+        },
+        "models.SignInResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

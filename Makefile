@@ -7,6 +7,7 @@ MIGRATIONS_DIR = ./migrations
 DATABASE_URL = postgres://postgres:mypassword@localhost:5432/avitoSegmentsDb?sslmode=disable
 UP_STEP =
 DOWN_STEP = -all
+MAIN_GO = cmd/main.go
 
 build:
 	docker-compose build
@@ -23,3 +24,6 @@ migrate-up:
 
 migrate-down:
 	migrate -path $(MIGRATIONS_DIR) -database $(DATABASE_URL) down $(DOWN_STEP)
+
+swag-init:
+	swag init -g $(MAIN_GO)
