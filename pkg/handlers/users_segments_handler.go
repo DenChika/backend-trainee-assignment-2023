@@ -34,7 +34,6 @@ func (h *Handler) ManageUserToSegments(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, models.ManageUserToSegmentsResponse{
 		SlugsHaveBeenAdded:   resp.SlugsHaveBeenAdded,
 		SlugsHaveBeenRemoved: resp.SlugsHaveBeenRemoved,
-		UserId:               resp.UserId,
 	})
 }
 
