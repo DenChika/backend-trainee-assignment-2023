@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 	"log"
 	"strings"
 )
@@ -25,6 +26,7 @@ func (repo *segmentRepository) Create(slug string) (uint, error) {
 	var id uint
 	row := repo.db.QueryRow(query, slug)
 	if err := row.Scan(&id); err != nil {
+		logrus.Fatalf("failed creating segment: %s\n", err.Error())
 		return 0, err
 	}
 	return id, nil
@@ -36,6 +38,7 @@ func (repo *segmentRepository) Delete(slug string) error {
 	_, err := tx.Exec(queryDelete, slug)
 	if err != nil {
 		_ = tx.Rollback()
+		logrus.Fatalf("failed deleting segment from db: %s\n", err.Error())
 		return err
 	}
 	queryLastOperation := fmt.Sprintf(
@@ -51,9 +54,9 @@ func (repo *segmentRepository) Delete(slug string) error {
 	err = tx.Select(&requests, queryLastOperation, slug)
 	if err != nil {
 		_ = tx.Rollback()
+		logrus.Fatalf("failed finding last operation in users_segments_history: %s\n", err.Error())
 		return err
 	}
-	log.Printf("ab: %v", requests)
 	if len(requests) == 0 {
 		return tx.Commit()
 	}
@@ -74,6 +77,7 @@ func (repo *segmentRepository) Delete(slug string) error {
 	_, err = tx.Exec(query)
 	if err != nil {
 		_ = tx.Rollback()
+		logrus.Fatalf("failed saving 'delete' operation in users_segments_history: %s\n", err.Error())
 		return err
 	}
 	return tx.Commit()

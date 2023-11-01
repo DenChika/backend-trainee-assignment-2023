@@ -8,8 +8,8 @@ import (
 	"errors"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"log"
 	"net/http"
 	"os"
 )
@@ -23,11 +23,11 @@ import (
 
 func main() {
 	if err := initConfigs(); err != nil {
-		log.Fatalf("failed initializing configs: %v\n", err)
+		logrus.Fatalf("failed initializing configs: %s\n", err.Error())
 	}
 
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("failed loading env varisbles: %v\n", err)
+		logrus.Fatalf("failed loading env varisbles: %s\n", err.Error())
 	}
 	db, err := repository.ConnectToDb(
 		repository.DbConfig{
@@ -43,7 +43,7 @@ func main() {
 		_ = db.Close()
 	}(db)
 	if err != nil {
-		log.Fatalf("failed to connect to database: %v\n", err)
+		logrus.Fatalf("failed to connect to database: %s\n", err.Error())
 	}
 
 	repos := repository.NewRepository(db)
@@ -51,7 +51,7 @@ func main() {
 	handler := handlers.NewHandler(service)
 	server := new(backend_trainee_assignment_2023.Server)
 	if err := server.Run(viper.GetString("port"), handler.InitRoutes()); !errors.Is(err, http.ErrServerClosed) {
-		log.Fatalf("error occured while running http server: %v\n", err)
+		logrus.Fatalf("error occured while running http server: %s\n", err.Error())
 	}
 }
 
